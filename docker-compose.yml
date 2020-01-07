@@ -1,0 +1,7 @@
+version: '3'
+services:
+  bot:
+    build: .
+    volumes:
+      - ./app:/home/app
+    env_file: ./config/telegram.env
