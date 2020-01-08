@@ -1,7 +1,16 @@
-version: '3'
+version: "3"
 services:
   bot:
     build: .
     volumes:
       - ./app:/home/app
     env_file: ./config/telegram.env
+    depends_on:
+      - db
+  db:
+    image: postgres:11.2
+    ports:
+      - "5432:5432"
+    volumes:
+      # - ./db/postgres-data:/var/lib/postgresql/data
+      - /var/lib/postgresql/data

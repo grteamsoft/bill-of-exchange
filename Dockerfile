@@ -4,6 +4,7 @@ WORKDIR /home
 
 RUN pip install -U pip
 RUN pip install -U aiogram
+RUN pip install -U psycopg2 
 RUN apt-get update
 
 # CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
