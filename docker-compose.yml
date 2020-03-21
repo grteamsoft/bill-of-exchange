@@ -3,7 +3,7 @@ services:
   bot:
     build: .
     volumes:
-      - ./app:/home/app
+      - ./:/app
     env_file: ./config/telegram.env
     depends_on:
       - db

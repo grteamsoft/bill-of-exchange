@@ -1,6 +1,6 @@
 FROM python:3.8.2
 
-WORKDIR /home
+WORKDIR /app
 
 RUN pip install -U pip
 RUN pip install -U aiogram
