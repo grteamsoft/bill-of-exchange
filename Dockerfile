@@ -4,8 +4,6 @@ WORKDIR /app
 
 RUN pip install -U pip
 RUN pip install -U aiogram
-RUN pip install -U psycopg2 
-
-# CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
+RUN pip install -U psycopg2
 
 ENTRYPOINT ["bin/start_dev.sh"]
