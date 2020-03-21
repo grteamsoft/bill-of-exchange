@@ -8,4 +8,4 @@ RUN pip install -U psycopg2
 
 # CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
 
-ENTRYPOINT ["python", "app/server.py"]
+ENTRYPOINT ["bin/start_dev.sh"]
