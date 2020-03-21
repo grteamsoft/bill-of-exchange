@@ -9,7 +9,7 @@ cursor = conn.cursor()
 
 
 def _init_db():
-    with open(os.path.join("app", "db", "createdb.sql"), "r") as f:
+    with open(os.path.join(os.getcwd(), os.path.dirname(__file__), "createdb.sql"), "r") as f:
         sql = f.read()
     cursor.execute(sql)
     conn.commit()

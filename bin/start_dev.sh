@@ -10,4 +10,6 @@ cd "$( dirname "${BASH_SOURCE[0]}" )"
 # @todo Change it to readiness probe to all the services it depends on.
 sleep 10;
 
+./migrate.sh
+
 python ../app/server.py

@@ -2,8 +2,6 @@ import os
 from aiogram import Bot, Dispatcher, executor, types
 from middlewares.access_middleware import AccessMiddleware
 
-import db.db_service
-
 API_TOKEN = os.getenv("TELEGRAM_API_TOKEN")
 ADMIN_ID = os.getenv("TELEGRAM_ADMIN_ID")
 
