@@ -1,0 +1,2 @@
+aiogram==2.6.1
+psycopg2===2.8.4
