@@ -1,2 +1,5 @@
 aiogram==2.6.1
+argh===0.26.2
 psycopg2===2.8.4
+pyyaml===5.3.1
+watchdog===0.10.2

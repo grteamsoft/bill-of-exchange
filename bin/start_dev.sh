@@ -12,4 +12,8 @@ sleep 10;
 
 ./migrate.sh
 
-python ../app/server.py
+watchmedo auto-restart \
+  --recursive \
+  --pattern="*.py" \
+  --directory="/app" \
+  python -- /app/app/server.py
