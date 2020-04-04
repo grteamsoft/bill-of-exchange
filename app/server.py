@@ -1,3 +1,4 @@
+import logging
 import os
 from aiogram import Bot, Dispatcher, executor, types
 from middlewares.access_middleware import AccessMiddleware
@@ -5,6 +6,10 @@ from middlewares.access_middleware import AccessMiddleware
 API_TOKEN = os.getenv("TELEGRAM_API_TOKEN")
 ADMIN_ID = os.getenv("TELEGRAM_ADMIN_ID")
 
+logger = logging.getLogger('scope.name')
+stderr_log_handler = logging.StreamHandler()
+logger.setLevel(logging.DEBUG)
+logger.addHandler(stderr_log_handler)
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
@@ -30,4 +35,6 @@ async def send_echo(message: types.Message):
 
 
 if __name__ == '__main__':
+    logger.info('server started')
+
     executor.start_polling(dp, skip_updates=True)
