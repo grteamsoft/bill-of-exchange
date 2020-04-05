@@ -1,0 +1,25 @@
+# Env variables description:
+# - HEROKU_API_KEY - `heroku authorizations:create --expires-in 315360000 --output-format short`
+# - HEROKU_APP_NAME - heroku app name
+# - HEROKU_DYNONAME - name of the dyno in the heroku app
+# - HEROKU_USERNAME - username who is owner of the heroku account
+
+# @todo It's useless to have python language as we're doing everything inside the container.
+language: python
+
+sudo: required
+services:
+  - docker
+
+script: echo "Here will be linter and test run"
+
+before_deploy:
+  - docker login --username=${HEROKU_USERNAME} --password=${HEROKU_API_KEY} registry.heroku.com
+  - docker build -t registry.heroku.com/${HEROKU_APP_NAME}/${HEROKU_DYNONAME} -f devops/docker/Dockerfile.prod .
+  - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+
+deploy:
+  provider: script
+  script: ./bin/deploy.sh
+  on:
+    branch: master
