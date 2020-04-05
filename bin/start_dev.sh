@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# The script is used to run the application.
+# The script is used to run the application on dev environment.
 
 set -xeuo pipefail
 IFS=$'\n\t'
