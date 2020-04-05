@@ -1,7 +1,9 @@
 version: "3"
 services:
   bot:
-    build: .
+    build:
+      context: .
+      dockerfile: ./devops/docker/Dockerfile.dev
     volumes:
       - ./:/app
     env_file: ./config/telegram.env
