@@ -1,4 +1,4 @@
-python-telegram-bot==12.7
+python-telegram-bot===12.7
 argh===0.26.2
 psycopg2===2.8.4
 pyyaml===5.3.1

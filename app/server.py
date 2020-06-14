@@ -8,7 +8,6 @@ from subprocess import Popen, PIPE
 import logging.config
 from keyboard import *
 
-
 LOGGING = {
     'disable_existing_loggers': True,
     'version': 1,
@@ -39,7 +38,6 @@ stderr_log_handler = logging.StreamHandler()
 logger.setLevel(logging.DEBUG)
 logger.addHandler(stderr_log_handler)
 
-
 def debug_requests(f):
     """
     Telegram event decorator
@@ -52,7 +50,6 @@ def debug_requests(f):
             logger.exception(f"Error in handler {f.__name__}")
             raise
     return inner
-
 
 API_TOKEN = os.getenv("TELEGRAM_API_TOKEN")
 
@@ -162,32 +159,18 @@ def do_list_my_debt(update, context):
         text="A list of my debts will be displayed."
     )
 
-
 def main():
     logger.info("Start Bot ...")
     updater = Updater(API_TOKEN, use_context=True)
-
-    # Get the dispatcher to register handlers
     dp = updater.dispatcher
-
-    #bot = Bot(token = API_TOKEN)
-    #updater = Updater(bot=bot)
-
     start_handler = CommandHandler("start", do_start)
     info_handler = CommandHandler("info", do_info)
-
     message_handler = MessageHandler(Filters.command | Filters.text, do_echo)
     buttons_handler = CallbackQueryHandler(callback=keyboard_callback_handler, pass_chat_data=True)
-
-
     dp.add_handler(start_handler)
-
     dp.add_handler(info_handler)
-
-
     dp.add_handler(message_handler)
     dp.add_handler(buttons_handler)
-
     updater.start_polling()
     updater.idle()
 

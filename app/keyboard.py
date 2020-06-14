@@ -1,9 +1,8 @@
-from telegram import InlineKeyboardButton, \
-    InlineKeyboardMarkup, ParseMode, KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove
-
 """
 This file will create button structures that we will use
 """
+from telegram import InlineKeyboardButton, \
+    InlineKeyboardMarkup, ParseMode, KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove
 
 """
 Buttons from the bottom menu
@@ -16,7 +15,6 @@ BUTTON4_INFO = "INFORMATION"
 """
 Menu buttons that will be in the chat
 """
-
 CALLBACK_BUTTON1 = "callback_button1"
 CALLBACK_BUTTON2 = "callback_button2"
 CALLBACK_BUTTON3 = "callback_button3"
@@ -29,7 +27,6 @@ CALLBACK_BUTTON9 = "callback_button9"
 CALLBACK_BUTTON10 = "callback_button10"
 CALLBACK_BUTTON11 = "callback_button11"
 
-
 TITLES = {
     CALLBACK_BUTTON1: "Add Debtor 🔥",
     CALLBACK_BUTTON2: "List of Debtors 📝",
@@ -41,13 +38,10 @@ TITLES = {
     CALLBACK_BUTTON8: "Debtor 5",
     CALLBACK_BUTTON9: "Debtor 6",
     CALLBACK_BUTTON10: "Find/Add Contact",
-    CALLBACK_BUTTON11: "List of Contacts"
+    CALLBACK_BUTTON11: "List of Contacts"}
 
-
-}
 """
 Creating the structure of buttons in the chat menu
-
 """
 def get_keyboard_inline():
     keyboard = [
@@ -90,6 +84,7 @@ def get_debt_keyboard_inline():
     ]
 
     return InlineKeyboardMarkup(keyboard)
+
 """
 creating bottom menu buttons
 """
@@ -108,5 +103,4 @@ def get_start_keyboard():
     ]
     return ReplyKeyboardMarkup(
         keyboard=keyboard,
-        resize_keyboard=True,
-    )
+        resize_keyboard=True)
