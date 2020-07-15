@@ -1,12 +1,9 @@
-from telegram import Bot, Update, InlineKeyboardButton, \
-    InlineKeyboardMarkup, ParseMode, KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import Updater
 from telegram.ext import CommandHandler, MessageHandler, Filters,\
     CallbackQueryHandler
-import os, logging, datetime, requests
-from subprocess import Popen, PIPE
+import os, datetime
 import logging.config
-from keyboard import *
+import keyboard
 
 LOGGING = {
     'disable_existing_loggers': True,
@@ -63,26 +60,26 @@ def keyboard_callback_handler(update, context):
     now = datetime.datetime.now()
     chat_id = update.effective_message.chat_id
     current_text =update.effective_message.text
-    if data == CALLBACK_BUTTON1:
+    if data == keyboard.CALLBACK_BUTTON1:
         context.bot.send_message(
             chat_id=chat_id,
             text="Add a new contact to send a request or \n"
                  "choose from the list with whom you have already worked",
-            reply_markup=get_add_debt_keyboard(),
+            reply_markup=keyboard.get_add_debt_keyboard(),
         )
-    elif data == CALLBACK_BUTTON2:
+    elif data == keyboard.CALLBACK_BUTTON2:
         context.bot.send_message(
             chat_id=chat_id,
             text=" There will be something like a menu in which it will be visible to whom you have already sent requests \n"
                  "Each button below the message will connect you with the contact you have already contacted.\n"
                  "I also don’t know how to implementь",
-            reply_markup=get_debt_keyboard_inline(),
+            reply_markup=keyboard.get_debt_keyboard_inline(),
         )
-    elif data == CALLBACK_BUTTON5_BACK:
+    elif data == keyboard.CALLBACK_BUTTON5_BACK:
         context.bot.send_message(
             chat_id=chat_id,
             text="Choose an action",
-            reply_markup=get_keyboard_inline()
+            reply_markup=keyboard.get_keyboard_inline()
         )
 
 @debug_requests
@@ -90,7 +87,7 @@ def add_debt(update, context):
     context.bot.send_message(
         chat_id=update.message.chat_id,
         text="Add a new contact or select an existing one",
-        reply_markup=get_keyboard_inline()
+        reply_markup=keyboard.get_keyboard_inline()
     )
 
 @debug_requests
@@ -98,18 +95,17 @@ def pay_debt(update, context):
     context.bot.send_message(
         chat_id=update.message.chat_id,
         text="A list of lenders for payment will be displayed.",
-        reply_markup=get_debt_keyboard_inline()
+        reply_markup=keyboard.get_debt_keyboard_inline()
     )
 
 @debug_requests
 def do_start(update, context):
-    #chat_id =475038836
     text = "Hello! This is a bot for tracking, sharing your purchases / accounts \n" \
            "For information, click the Information button."
     context.bot.send_message(
         chat_id=update.message.chat_id,
         text=text,
-        reply_markup=get_start_keyboard()
+        reply_markup=keyboard.get_start_keyboard()
     )
 
 @debug_requests
@@ -117,13 +113,13 @@ def do_echo(update, context):
     username = context.user_data
     chat_id = update.message.chat_id
     text = update.message.text
-    if text == BUTTON1_ADD_DEBT:
+    if text == keyboard.BUTTON1_ADD_DEBT:
         return add_debt(update, context)
-    elif text == BUTTON2_PAY_DEBT:
+    elif text == keyboard.BUTTON2_PAY_DEBT:
         return pay_debt(update, context)
-    elif text == BUTTON3_LIST_DEBT:
+    elif text == keyboard.BUTTON3_LIST_DEBT:
         return do_list_debt(update, context)
-    elif text == BUTTON4_INFO:
+    elif text == keyboard.BUTTON4_INFO:
         return do_info(update, context)
     else:
         reply_text = "USER ID = {} \n The bot is still under development\n" \
@@ -132,7 +128,7 @@ def do_echo(update, context):
         context.bot.send_message(
             chat_id=chat_id,
             text=reply_text,
-            reply_markup = get_start_keyboard(),
+            reply_markup = keyboard.get_start_keyboard(),
         )
 
 def do_info(update, context):
@@ -142,7 +138,7 @@ def do_info(update, context):
     context.bot.send_message(
         chat_id=update.message.chat_id,
         text=text,
-        reply_markup=get_start_keyboard()
+        reply_markup=keyboard.get_start_keyboard()
     )
 
 def do_list_debt(update, context):
