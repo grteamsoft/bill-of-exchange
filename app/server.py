@@ -60,14 +60,14 @@ def keyboard_callback_handler(update, context):
     now = datetime.datetime.now()
     chat_id = update.effective_message.chat_id
     current_text =update.effective_message.text
-    if data == keyboard.CALLBACK_BUTTON1:
+    if data == keyboard.KEYBOARD_INLINE[0][0]:
         context.bot.send_message(
             chat_id=chat_id,
             text="Add a new contact to send a request or \n"
                  "choose from the list with whom you have already worked",
             reply_markup=keyboard.get_add_debt_keyboard(),
         )
-    elif data == keyboard.CALLBACK_BUTTON2:
+    elif data == keyboard.KEYBOARD_INLINE[1][0]:
         context.bot.send_message(
             chat_id=chat_id,
             text=" There will be something like a menu in which it will be visible to whom you have already sent requests \n"
@@ -75,7 +75,7 @@ def keyboard_callback_handler(update, context):
                  "I also don’t know how to implementь",
             reply_markup=keyboard.get_debt_keyboard_inline(),
         )
-    elif data == keyboard.CALLBACK_BUTTON5_BACK:
+    elif data == keyboard.KEYBOARD_INLINE[3][0]:
         context.bot.send_message(
             chat_id=chat_id,
             text="Choose an action",
@@ -113,13 +113,13 @@ def do_echo(update, context):
     username = context.user_data
     chat_id = update.message.chat_id
     text = update.message.text
-    if text == keyboard.BUTTON1_ADD_DEBT:
+    if text == keyboard.ADD_DEBT_KEYBOARD:
         return add_debt(update, context)
-    elif text == keyboard.BUTTON2_PAY_DEBT:
+    elif text == keyboard.PAY_DEBT_KEYBOARD:
         return pay_debt(update, context)
-    elif text == keyboard.BUTTON3_LIST_DEBT:
+    elif text == keyboard.LIST_DEBT_KEYBOARD:
         return do_list_debt(update, context)
-    elif text == keyboard.BUTTON4_INFO:
+    elif text == keyboard.INFO_KEYBOARD:
         return do_info(update, context)
     else:
         reply_text = "USER ID = {} \n The bot is still under development\n" \
