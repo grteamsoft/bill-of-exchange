@@ -60,14 +60,14 @@ def keyboard_callback_handler(update, context):
     now = datetime.datetime.now()
     chat_id = update.effective_message.chat_id
     current_text =update.effective_message.text
-    if data == keyboard.KEYBOARD_INLINE[0][0]:
+    if data == keyboard.KEYBOARD_INLINE['ADD_DEBT_INLINE']['code']:
         context.bot.send_message(
             chat_id=chat_id,
             text="Add a new contact to send a request or \n"
                  "choose from the list with whom you have already worked",
             reply_markup=keyboard.get_add_debt_keyboard(),
         )
-    elif data == keyboard.KEYBOARD_INLINE[1][0]:
+    elif data == keyboard.KEYBOARD_INLINE['LIST_DEBT_INLINE']['code']:
         context.bot.send_message(
             chat_id=chat_id,
             text=" There will be something like a menu in which it will be visible to whom you have already sent requests \n"
@@ -75,7 +75,7 @@ def keyboard_callback_handler(update, context):
                  "I also don’t know how to implementь",
             reply_markup=keyboard.get_debt_keyboard_inline(),
         )
-    elif data == keyboard.KEYBOARD_INLINE[3][0]:
+    elif data == keyboard.KEYBOARD_INLINE['BACK_INLINE']['code']:
         context.bot.send_message(
             chat_id=chat_id,
             text="Choose an action",

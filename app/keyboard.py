@@ -15,25 +15,27 @@ INFO_KEYBOARD = "INFORMATION"
 """
 Menu buttons that will be in the chat
 """
-KEYBOARD_INLINE = [
-    ["ADD_DEBT_INLINE", "Add Debtor 🔥"],
-    ["LIST_DEBT_INLINE", "List of Debtors 📝"],
-    ["DEBTOR_INLINE", "Debtor 1"],
-    ["BACK_INLINE", "Back 🔙"],
-    ["FIND_CONT_INLINE", "Find/Add Contact"],
-    ["LIST_CONT_INLINE", "List of Contacts"]]
 
+KEYBOARD_INLINE = {'ADD_DEBT_INLINE': {'code': "ADD_DEBT_INLINE", 'label': "Add Debtor 🔥"},
+                   'LIST_DEBT_INLINE': {'code': "LIST_DEBT_INLINE", 'label': "List of Debtors 📝"},
+                   'DEBTOR_INLINE': {'code': "DEBTOR_INLINE", 'label': "Debtor 1"},
+                   'BACK_INLINE': {'code': "BACK_INLINE", 'label': "Back 🔙"},
+                   'FIND_CONT_INLINE': {'code': "FIND_CONT_INLINE", 'label': "Find/Add Contact"},
+                   'LIST_CONT_INLINE': {'code': "LIST_CONT_INLINE", 'label': "List of Contacts"}}
 """
 Creating the structure of buttons in the chat menu
 """
 def get_keyboard_inline():
     keyboard = [
         [
-            InlineKeyboardButton(KEYBOARD_INLINE[0][1], callback_data=KEYBOARD_INLINE[0][0]),
-            InlineKeyboardButton(KEYBOARD_INLINE[1][1], callback_data=KEYBOARD_INLINE[1][0])
+            InlineKeyboardButton(KEYBOARD_INLINE['ADD_DEBT_INLINE']['label'],
+                                 callback_data=KEYBOARD_INLINE['ADD_DEBT_INLINE']['code']),
+            InlineKeyboardButton(KEYBOARD_INLINE['LIST_DEBT_INLINE']['label'],
+                                 callback_data=KEYBOARD_INLINE['LIST_DEBT_INLINE']['code'])
         ],
         [
-            InlineKeyboardButton(KEYBOARD_INLINE[3][1], callback_data=KEYBOARD_INLINE[3][0])
+            InlineKeyboardButton(KEYBOARD_INLINE['BACK_INLINE']['label'],
+                                 callback_data=KEYBOARD_INLINE['BACK_INLINE']['code'])
         ],
     ]
     return InlineKeyboardMarkup(keyboard)
@@ -41,11 +43,14 @@ def get_keyboard_inline():
 def get_add_debt_keyboard():
     keyboard = [
         [
-            InlineKeyboardButton(KEYBOARD_INLINE[4][1], callback_data=KEYBOARD_INLINE[4][0]),
-            InlineKeyboardButton(KEYBOARD_INLINE[5][1], callback_data=KEYBOARD_INLINE[5][0]),
+            InlineKeyboardButton(KEYBOARD_INLINE['FIND_CONT_INLINE']['label'],
+                                 callback_data=KEYBOARD_INLINE['FIND_CONT_INLINE']['code']),
+            InlineKeyboardButton(KEYBOARD_INLINE['LIST_CONT_INLINE']['label'],
+                                 callback_data=KEYBOARD_INLINE['LIST_CONT_INLINE']['code']),
         ],
         [
-            InlineKeyboardButton(KEYBOARD_INLINE[3][1], callback_data=KEYBOARD_INLINE[3][0])
+            InlineKeyboardButton(KEYBOARD_INLINE['BACK_INLINE']['label'],
+                                 callback_data=KEYBOARD_INLINE['BACK_INLINE']['code'])
         ]
     ]
     return InlineKeyboardMarkup(keyboard)
@@ -53,17 +58,17 @@ def get_add_debt_keyboard():
 def get_debt_keyboard_inline():
     keyboard = [
         [
-            InlineKeyboardButton(KEYBOARD_INLINE[2][1], callback_data=KEYBOARD_INLINE[2][0]),
-            InlineKeyboardButton(KEYBOARD_INLINE[2][1], callback_data=KEYBOARD_INLINE[2][0])
+            InlineKeyboardButton(KEYBOARD_INLINE['DEBTOR_INLINE']['label'],
+                                 callback_data=KEYBOARD_INLINE['DEBTOR_INLINE']['code']),
+            InlineKeyboardButton(KEYBOARD_INLINE['DEBTOR_INLINE']['label'],
+                                 callback_data=KEYBOARD_INLINE['DEBTOR_INLINE']['code'])
         ],
         [
-            InlineKeyboardButton(KEYBOARD_INLINE[2][1], callback_data=KEYBOARD_INLINE[2][0]),
-            InlineKeyboardButton(KEYBOARD_INLINE[2][1], callback_data=KEYBOARD_INLINE[2][0])
+            InlineKeyboardButton(KEYBOARD_INLINE['DEBTOR_INLINE']['label'],
+                                 callback_data=KEYBOARD_INLINE['DEBTOR_INLINE']['code']),
+            InlineKeyboardButton(KEYBOARD_INLINE['DEBTOR_INLINE']['label'],
+                                 callback_data=KEYBOARD_INLINE['DEBTOR_INLINE']['code'])
         ],
-        [
-            InlineKeyboardButton(KEYBOARD_INLINE[2][1], callback_data=KEYBOARD_INLINE[2][0]),
-            InlineKeyboardButton(KEYBOARD_INLINE[2][1], callback_data=KEYBOARD_INLINE[2][0])
-        ]
     ]
 
     return InlineKeyboardMarkup(keyboard)
