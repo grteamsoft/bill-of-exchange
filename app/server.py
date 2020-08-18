@@ -57,17 +57,19 @@ def keyboard_callback_handler(update, context):
     query = update.callback_query
     query.answer()
     data = query.data
-    now = datetime.datetime.now()
+    # now = datetime.datetime.now()
     chat_id = update.effective_message.chat_id
-    current_text =update.effective_message.text
-    if data == keyboard.KEYBOARD_INLINE['ADD_DEBT_INLINE']['code']:
+    #current_text =update.effective_message.text
+
+    def ADD_DEBT_KEYBOARD():
         context.bot.send_message(
             chat_id=chat_id,
             text="Add a new contact to send a request or \n"
                  "choose from the list with whom you have already worked",
             reply_markup=keyboard.get_add_debt_keyboard(),
         )
-    elif data == keyboard.KEYBOARD_INLINE['LIST_DEBT_INLINE']['code']:
+
+    def DEBT_KEYBOARD():
         context.bot.send_message(
             chat_id=chat_id,
             text=" There will be something like a menu in which it will be visible to whom you have already sent requests \n"
@@ -75,12 +77,23 @@ def keyboard_callback_handler(update, context):
                  "I also don’t know how to implementь",
             reply_markup=keyboard.get_debt_keyboard_inline(),
         )
-    elif data == keyboard.KEYBOARD_INLINE['BACK_INLINE']['code']:
+
+    def GET_KEYBOARD():
         context.bot.send_message(
             chat_id=chat_id,
             text="Choose an action",
             reply_markup=keyboard.get_keyboard_inline()
         )
+
+    def select_keyboard(argument):
+        switcher = {
+            keyboard.KEYBOARD_INLINE['ADD_DEBT_INLINE']['code'] : ADD_DEBT_KEYBOARD,
+            keyboard.KEYBOARD_INLINE['LIST_DEBT_INLINE']['code']: DEBT_KEYBOARD,
+            keyboard.KEYBOARD_INLINE['BACK_INLINE']['code']: GET_KEYBOARD,
+        }
+        func = switcher.get(argument, lambda: "Error")
+        return func()
+    select_keyboard(data)
 
 @debug_requests
 def add_debt(update, context):
