@@ -3,7 +3,7 @@ from telegram.ext import CommandHandler, MessageHandler, Filters,\
     CallbackQueryHandler
 import os, datetime
 import logging.config
-import keyboard
+import keyboard, psycopg2
 
 LOGGING = {
     'disable_existing_loggers': True,
@@ -155,10 +155,20 @@ def do_info(update, context):
     )
 
 def do_list_debt(update, context):
+
+    conn = psycopg2.connect(dbname='postgres', user='postgres', password='postgres', host='db')
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT * FROM users')
+    records = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    text = str(records)
+
     chat_id = update.message.chat_id
     context.bot.send_message(
         chat_id=chat_id,
-        text="A list of debtors will be displayed."
+        text=text,
     )
 
 def do_list_my_debt(update, context):
