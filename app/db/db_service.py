@@ -3,10 +3,6 @@ import psycopg2
 from psycopg2.extras import DictCursor
 from typing import Dict, List, Tuple
 
-
-
-
-
 conn = psycopg2.connect(user="postgres", host="db")
 cursor = conn.cursor()
 

@@ -148,6 +148,16 @@ def do_info(update, context):
     text = "With the help of the bot, you can share a common check!\n" \
            "To do this, click the add debt button, select the contact (or the name of the debtor)," \
            "and write the amount of debt in a line and for what, then send a request to the name of the debtor"
+
+    """"""
+    conn = psycopg2.connect(dbname='postgres', user='postgres', password='postgres', host='db')
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO USERS (telegram_id, last_name, first_name, create_at) VALUES (55555, 'Alex', 'Alexandr', '2020-09-10')")
+    cursor.close()
+    conn.commit()
+
+    conn.close()
+
     context.bot.send_message(
         chat_id=update.message.chat_id,
         text=text,

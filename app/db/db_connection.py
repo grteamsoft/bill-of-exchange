@@ -7,3 +7,14 @@ cursor.execute('SELECT * FROM users')
 records = cursor.fetchall()
 cursor.close()
 conn.close()
+
+
+
+"""
+with closing(psycopg2.connect(...)) as conn:
+    with conn.cursor() as cursor:
+        cursor.execute('SELECT * FROM airport LIMIT 5')
+        for row in cursor:
+            print(row)
+
+"""
