@@ -105,6 +105,14 @@ def add_debt(update, context):
 
 @debug_requests
 def pay_debt(update, context):
+    conn = psycopg2.connect(dbname='postgres', user='postgres', password='postgres', host='db')
+    cursor = conn.cursor()
+    cursor.execute(
+        "DELETE from USERS where telegram_id=55555")
+    cursor.close()
+    conn.commit()
+
+    conn.close()
     context.bot.send_message(
         chat_id=update.message.chat_id,
         text="A list of lenders for payment will be displayed.",
