@@ -5,6 +5,8 @@ import os, datetime
 import logging.config
 import keyboard, psycopg2
 
+from db import db_connection
+
 LOGGING = {
     'disable_existing_loggers': True,
     'version': 1,
@@ -105,14 +107,7 @@ def add_debt(update, context):
 
 @debug_requests
 def pay_debt(update, context):
-    conn = psycopg2.connect(dbname='postgres', user='postgres', password='postgres', host='db')
-    cursor = conn.cursor()
-    cursor.execute(
-        "DELETE from USERS where telegram_id=55555")
-    cursor.close()
-    conn.commit()
-
-    conn.close()
+    db_connection.delete_db()
     context.bot.send_message(
         chat_id=update.message.chat_id,
         text="A list of lenders for payment will be displayed.",
@@ -157,14 +152,7 @@ def do_info(update, context):
            "To do this, click the add debt button, select the contact (or the name of the debtor)," \
            "and write the amount of debt in a line and for what, then send a request to the name of the debtor"
 
-    """"""
-    conn = psycopg2.connect(dbname='postgres', user='postgres', password='postgres', host='db')
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO USERS (telegram_id, last_name, first_name, create_at) VALUES (55555, 'Alex', 'Alexandr', '2020-09-10')")
-    cursor.close()
-    conn.commit()
-
-    conn.close()
+    db_connection.insert_db()
 
     context.bot.send_message(
         chat_id=update.message.chat_id,
@@ -173,16 +161,7 @@ def do_info(update, context):
     )
 
 def do_list_debt(update, context):
-
-    conn = psycopg2.connect(dbname='postgres', user='postgres', password='postgres', host='db')
-    cursor = conn.cursor()
-
-    cursor.execute('SELECT * FROM users')
-    records = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    text = str(records)
-
+    text = str(db_connection.select_db())
     chat_id = update.message.chat_id
     context.bot.send_message(
         chat_id=chat_id,

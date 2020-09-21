@@ -8,9 +8,9 @@ from telegram import InlineKeyboardButton, \
 Buttons from the bottom menu
 """
 ADD_DEBT_KEYBOARD = "ADD DEBT"
-PAY_DEBT_KEYBOARD = "PAY DEBT"
-LIST_DEBT_KEYBOARD = "LIST OF DEBTS"
-INFO_KEYBOARD = "INFORMATION"
+PAY_DEBT_KEYBOARD = "PAY DEBT --- DELETE"
+LIST_DEBT_KEYBOARD = "LIST OF DEBTS --- OUTPUT"
+INFO_KEYBOARD = "INFORMATION --- INSERT"
 
 """
 Menu buttons that will be in the chat
