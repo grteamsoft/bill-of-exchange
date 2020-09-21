@@ -161,7 +161,8 @@ def do_info(update, context):
     )
 
 def do_list_debt(update, context):
-    text = str(db_connection.select_db())
+
+    text = db_connection.select_db()
     chat_id = update.message.chat_id
     context.bot.send_message(
         chat_id=chat_id,

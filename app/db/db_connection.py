@@ -1,12 +1,20 @@
 import psycopg2
+from psycopg2.extras import DictCursor
 conn = psycopg2.connect(dbname='postgres', user='postgres', password='postgres', host='db')
 
 def select_db():
     with conn:
-        with conn.cursor() as curs:
+        with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute('SELECT * FROM users')
             records = curs.fetchall()
-            return records
+            text = ''
+            text1 = ''
+            for record in records:
+                for q in record:
+                    text1 = text1 + str(q) + '  '
+                text = text + '\n' + text1
+                text1 = ''
+            return text
 
 def insert_db():
     with conn:
