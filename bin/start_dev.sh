@@ -8,7 +8,7 @@ cd "$( dirname "${BASH_SOURCE[0]}" )"
 
 # Waiting for all the dependent services running.
 # @todo Change it to readiness probe to all the services it depends on.
-sleep 10;
+sleep 3;
 
 ./migrate.sh
 
