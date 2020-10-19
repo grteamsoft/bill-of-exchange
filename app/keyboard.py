@@ -11,6 +11,7 @@ ADD_DEBT_KEYBOARD = "ADD DEBT"
 PAY_DEBT_KEYBOARD = "PAY DEBT --- DELETE"
 LIST_DEBT_KEYBOARD = "LIST OF DEBTS --- OUTPUT"
 INFO_KEYBOARD = "INFORMATION --- INSERT"
+TABLE_TRANSACTION = "TABLE OF TRANSACTIONS"
 
 """
 Menu buttons that will be in the chat
@@ -69,6 +70,10 @@ def get_debt_keyboard_inline():
             InlineKeyboardButton(KEYBOARD_INLINE['DEBTOR_INLINE']['label'],
                                  callback_data=KEYBOARD_INLINE['DEBTOR_INLINE']['code'])
         ],
+        [
+            InlineKeyboardButton(KEYBOARD_INLINE['BACK_INLINE']['label'],
+                                 callback_data=KEYBOARD_INLINE['BACK_INLINE']['code'])
+        ]
     ]
 
     return InlineKeyboardMarkup(keyboard)
@@ -86,8 +91,9 @@ def get_start_keyboard():
             KeyboardButton(LIST_DEBT_KEYBOARD)
         ],
         [
-            KeyboardButton(INFO_KEYBOARD)
-        ]
+            KeyboardButton(INFO_KEYBOARD),
+            KeyboardButton(TABLE_TRANSACTION),
+        ],
     ]
     return ReplyKeyboardMarkup(
         keyboard=keyboard,

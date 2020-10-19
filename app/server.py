@@ -3,7 +3,7 @@ from telegram.ext import CommandHandler, MessageHandler, Filters,\
     CallbackQueryHandler
 import os, datetime
 import logging.config
-import keyboard, psycopg2
+import keyboard, re
 
 from db import db_connection
 
@@ -76,7 +76,7 @@ def keyboard_callback_handler(update, context):
             chat_id=chat_id,
             text=" There will be something like a menu in which it will be visible to whom you have already sent requests \n"
                  "Each button below the message will connect you with the contact you have already contacted.\n"
-                 "I also don’t know how to implementь",
+                 "I also don’t know how to implement",
             reply_markup=keyboard.get_debt_keyboard_inline(),
         )
 
@@ -87,11 +87,20 @@ def keyboard_callback_handler(update, context):
             reply_markup=keyboard.get_keyboard_inline()
         )
 
+    def GET_PARSING():
+        context.bot.send_message(
+            chat_id=chat_id,
+            text="!!!!!!!!!",
+            reply_markup=None
+        )
+
+
     def select_keyboard(argument):
         switcher = {
             keyboard.KEYBOARD_INLINE['ADD_DEBT_INLINE']['code'] : ADD_DEBT_KEYBOARD,
             keyboard.KEYBOARD_INLINE['LIST_DEBT_INLINE']['code']: DEBT_KEYBOARD,
             keyboard.KEYBOARD_INLINE['BACK_INLINE']['code']: GET_KEYBOARD,
+            keyboard.KEYBOARD_INLINE['FIND_CONT_INLINE']['code']: GET_PARSING,
         }
         func = switcher.get(argument, lambda: "Error")
         return func()
@@ -124,11 +133,14 @@ def do_start(update, context):
         reply_markup=keyboard.get_start_keyboard()
     )
 
+
+
 @debug_requests
 def do_echo(update, context):
     username = context.user_data
     chat_id = update.message.chat_id
     text = update.message.text
+    result = re.split(r' ', text)
     if text == keyboard.ADD_DEBT_KEYBOARD:
         return add_debt(update, context)
     elif text == keyboard.PAY_DEBT_KEYBOARD:
@@ -137,15 +149,36 @@ def do_echo(update, context):
         return do_list_debt(update, context)
     elif text == keyboard.INFO_KEYBOARD:
         return do_info(update, context)
+    elif text == keyboard.TABLE_TRANSACTION:
+        return do_transaction(update,context)
     else:
-        reply_text = "USER ID = {} \n The bot is still under development\n" \
+        do_id(update, context, result)
+
+        """reply_text = "USER ID = {} \n The bot is still under development\n" \
                      "You wrote: {}\n" \
-                     "USERNAME = {}".format(chat_id, text, username)
+                     "USERNAME = {}".format(chat_id, result, username)
         context.bot.send_message(
             chat_id=chat_id,
             text=reply_text,
             reply_markup = keyboard.get_start_keyboard(),
-        )
+        )"""
+
+def do_id(update, context, result):
+    """db_connection.insert_db_transactions()"""
+    telegram_id = update.message.chat_id
+    """ find telgram_id"""
+    created_by = db_connection.transfer_select_db(telegram_id)
+    """find user id"""
+    db_connection.insert_db_transactions(created_by, result)
+    text = "Добавляем значения в таблицу транзакция " + str(telegram_id) +'\n id =  '+ created_by + '\n creditor_id = ' + result[0] + '\n Все прошло хорошо'
+
+
+    context.bot.send_message(
+        chat_id=update.message.chat_id,
+        text=text,
+        reply_markup=None,
+    )
+
 
 def do_info(update, context):
     text = "With the help of the bot, you can share a common check!\n" \
@@ -158,6 +191,14 @@ def do_info(update, context):
         chat_id=update.message.chat_id,
         text=text,
         reply_markup=keyboard.get_start_keyboard()
+    )
+
+def do_transaction(update, context):
+    text = "Таблица транзакций \n " + db_connection.transaction_db()
+    chat_id = update.message.chat_id
+    context.bot.send_message(
+        chat_id=chat_id,
+        text=text,
     )
 
 def do_list_debt(update, context):
