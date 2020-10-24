@@ -21,3 +21,11 @@ If you are developing on Windows you may face the issue with line endings (LF vs
 
 - GIT: run `git config core.autocrlf false`;
 - VS Code (if using): set setting `{ "files.eol": "\n" }`
+
+## How to do migration
+
+Create a py-file with instructions and save it in the folder .app/migrations
+
+1) To execute the instruction, use the command - yoyo apply
+2) To cancel the statement use the command: yoyo rollback --all - for all statements;
+    yoyo rollback - for statemenst in reverse order one by one.
