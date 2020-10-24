@@ -2,9 +2,10 @@ import psycopg2, uuid
 from datetime import datetime
 from psycopg2.extras import DictCursor
 conn = psycopg2.connect(dbname='postgres', user='postgres', password='postgres', host='db')
-users = "users"
+
 
 def transfer_select_db(id):
+    """ the function finds users id by telegram id from table transactions"""
     telegram_id = str(id)
     with conn:
         with conn.cursor(cursor_factory=DictCursor) as curs:
@@ -13,6 +14,7 @@ def transfer_select_db(id):
             return records[0]
 
 def select_db():
+    """ this functions outputs all data from table users"""
     with conn:
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute('SELECT * FROM USERS')
@@ -27,6 +29,7 @@ def select_db():
             return text
 
 def transaction_db():
+    """ This functions outputs all data from table transactions"""
     with conn:
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute('SELECT * FROM TRANSACTIONS')
@@ -41,12 +44,14 @@ def transaction_db():
             return text
 
 def insert_db():
+    """this function inserts data about users  into table users"""
     with conn:
         with conn.cursor() as curs:
             curs.execute("INSERT INTO USERS (telegram_id, last_name, first_name, create_at) VALUES (111111111, 'Al', 'Ku', '2020-10-19')")
         conn.commit()
 
 def delete_db():
+    """ this functions deletes data from table users"""
     with conn:
         with conn.cursor() as curs:
             curs.execute("DELETE from USERS where telegram_id=55555")
@@ -55,6 +60,7 @@ def delete_db():
 uuid1=uuid.uuid4()
 
 def insert_db_transactions(created_by, result):
+    """ this functions inserts data into table transactions"""
     with conn:
         with conn.cursor() as curs:
             curs.execute(" INSERT INTO TRANSACTIONS"
