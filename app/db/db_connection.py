@@ -4,7 +4,7 @@ from psycopg2.extras import DictCursor
 conn = psycopg2.connect(dbname='postgres', user='postgres', password='postgres', host='db')
 
 
-def transfer_select_db(id):
+def users_select_id_db(id):
     """ the function finds users id by telegram id from table transactions"""
     telegram_id = str(id)
     with conn:
@@ -13,7 +13,7 @@ def transfer_select_db(id):
             records = curs.fetchone()
             return records[0]
 
-def select_db():
+def users_select_db():
     """ this functions outputs all data from table users"""
     with conn:
         with conn.cursor(cursor_factory=DictCursor) as curs:
@@ -28,7 +28,7 @@ def select_db():
                 text1 = ''
             return text
 
-def transaction_db():
+def transactions_select_db():
     """ This functions outputs all data from table transactions"""
     with conn:
         with conn.cursor(cursor_factory=DictCursor) as curs:
@@ -43,23 +43,23 @@ def transaction_db():
                 text1 = ''
             return text
 
-def insert_db():
+def users_insert_db():
     """this function inserts data about users  into table users"""
     with conn:
         with conn.cursor() as curs:
             curs.execute("INSERT INTO USERS (telegram_id, last_name, first_name, create_at) VALUES (111111111, 'Al', 'Ku', '2020-10-19')")
         conn.commit()
 
-def delete_db():
+def users_delete_db():
     """ this functions deletes data from table users"""
     with conn:
         with conn.cursor() as curs:
-            curs.execute("DELETE from USERS where telegram_id=55555")
+            curs.execute("DELETE from USERS where telegram_id=111111111")
         conn.commit()
 
 uuid1=uuid.uuid4()
 
-def insert_db_transactions(created_by, result):
+def transactions_insert_db(created_by, result):
     """ this functions inserts data into table transactions"""
     with conn:
         with conn.cursor() as curs:
@@ -68,21 +68,3 @@ def insert_db_transactions(created_by, result):
                          "VALUES (%s, %s, %s, %s, %s, %s)", (created_by, datetime.now(), result[1], result[2], result[0], created_by))
         conn.commit()
 
-"""cursor = conn.cursor()
-
-cursor.execute('SELECT * FROM users')
-records = cursor.fetchall()
-cursor.close()
-conn.close()
-
-"""
-
-
-"""
-with closing(psycopg2.connect(...)) as conn:
-    with conn.cursor() as cursor:
-        cursor.execute('SELECT * FROM airport LIMIT 5')
-        for row in cursor:
-            print(row)
-
-"""

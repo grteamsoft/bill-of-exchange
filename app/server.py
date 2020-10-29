@@ -59,15 +59,13 @@ def keyboard_callback_handler(update, context):
     query = update.callback_query
     query.answer()
     data = query.data
-    # now = datetime.datetime.now()
     chat_id = update.effective_message.chat_id
-    #current_text =update.effective_message.text
 
     def ADD_DEBT_KEYBOARD():
         context.bot.send_message(
             chat_id=chat_id,
-            text="Add a new contact to send a request or \n"
-                 "choose from the list with whom you have already worked",
+            text="For enter new information of the debtor: \n write the user ID, the amount, for which, press enter. Example: \n"
+                 "49a21054-1dc4-4e34-81ab-0acd9225da44 25 coffe",
             reply_markup=keyboard.get_add_debt_keyboard(),
         )
 
@@ -110,13 +108,14 @@ def keyboard_callback_handler(update, context):
 def add_debt(update, context):
     context.bot.send_message(
         chat_id=update.message.chat_id,
-        text="Add a new contact or select an existing one",
+        text="For enter new information of the debtor: \n write the user ID, the amount, for which, press enter. Example: \n"
+                 "49a21054-1dc4-4e34-81ab-0acd9225da44 25 coffe",
         reply_markup=keyboard.get_keyboard_inline()
     )
 
 @debug_requests
 def pay_debt(update, context):
-    db_connection.delete_db()
+    db_connection.users_delete_db()
     context.bot.send_message(
         chat_id=update.message.chat_id,
         text="A list of lenders for payment will be displayed.",
@@ -137,8 +136,6 @@ def do_start(update, context):
 
 @debug_requests
 def do_echo(update, context):
-    username = context.user_data
-    chat_id = update.message.chat_id
     text = update.message.text
     result = re.split(r' ', text)
     if text == keyboard.ADD_DEBT_KEYBOARD:
@@ -164,13 +161,13 @@ def do_echo(update, context):
         )"""
 
 def do_id(update, context, result):
-    """db_connection.insert_db_transactions()"""
+    
     telegram_id = update.message.chat_id
     """ find telgram_id"""
-    created_by = db_connection.transfer_select_db(telegram_id)
+    created_by = db_connection.users_select_id_db(telegram_id)
     """find user id"""
-    db_connection.insert_db_transactions(created_by, result)
-    text = "Добавляем значения в таблицу транзакция " + str(telegram_id) +'\n id =  '+ created_by + '\n creditor_id = ' + result[0] + '\n Все прошло хорошо'
+    db_connection.transactions_insert_db(created_by, result)
+    text = "Add values to the transaction table " + str(telegram_id) +'\n id =  '+ created_by + '\n creditor_id = ' + result[0] + '\n transaction successful'
 
 
     context.bot.send_message(
@@ -185,7 +182,7 @@ def do_info(update, context):
            "To do this, click the add debt button, select the contact (or the name of the debtor)," \
            "and write the amount of debt in a line and for what, then send a request to the name of the debtor"
 
-    db_connection.insert_db()
+    db_connection.users_insert_db()
 
     context.bot.send_message(
         chat_id=update.message.chat_id,
@@ -194,7 +191,7 @@ def do_info(update, context):
     )
 
 def do_transaction(update, context):
-    text = "Таблица транзакций \n " + db_connection.transaction_db()
+    text = "Table of transactions. \n " + db_connection.transactions_select_db()
     chat_id = update.message.chat_id
     context.bot.send_message(
         chat_id=chat_id,
@@ -203,7 +200,7 @@ def do_transaction(update, context):
 
 def do_list_debt(update, context):
 
-    text = db_connection.select_db()
+    text = db_connection.users_select_db()
     chat_id = update.message.chat_id
     context.bot.send_message(
         chat_id=chat_id,
