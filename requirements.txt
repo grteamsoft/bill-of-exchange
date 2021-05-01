@@ -1,6 +1,6 @@
 argh===0.26.2
-psycopg2===2.8.5
-python-telegram-bot===13.0
-pyyaml===5.3.1
-watchdog===0.10.3
-yoyo-migrations===7.2.0
+psycopg2===2.8.6
+python-telegram-bot===13.5
+pyyaml===5.4.1
+watchdog===2.0.3
+yoyo-migrations===7.3.1
