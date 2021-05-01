@@ -3,7 +3,7 @@ from yoyo import step
 __depends__ = {'20200730_01_create_table_users'}
 
 steps = [
-    step("CREATE TABLE transactions (id integer PRIMARY KEY,"
+    step("CREATE TABLE transactions (id uuid PRIMARY KEY,"
          "created_by uuid,"
          "created_at date,"
          "amount integer,"
