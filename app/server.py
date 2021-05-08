@@ -1,9 +1,11 @@
 from telegram.ext import Updater
-from telegram.ext import CommandHandler, MessageHandler, Filters,\
+from telegram.ext import CommandHandler, MessageHandler, Filters, \
     CallbackQueryHandler
 import os, datetime
 import logging.config
-import keyboard
+import keyboard, re
+
+from db import db_connection
 
 LOGGING = {
     'disable_existing_loggers': True,
@@ -30,15 +32,17 @@ LOGGING = {
     },
 }
 logging.config.dictConfig(LOGGING)
-logger=logging.getLogger('scope.name')
+logger = logging.getLogger('scope.name')
 stderr_log_handler = logging.StreamHandler()
 logger.setLevel(logging.DEBUG)
 logger.addHandler(stderr_log_handler)
+
 
 def debug_requests(f):
     """
     Telegram event decorator
     """
+
     def inner(*args, **kwargs):
         try:
             logger.info(f"Function call {f.__name__}")
@@ -46,26 +50,28 @@ def debug_requests(f):
         except Exception:
             logger.exception(f"Error in handler {f.__name__}")
             raise
+
     return inner
+
 
 API_TOKEN = os.getenv("TELEGRAM_API_TOKEN")
 
 """
 Handler for chat buttons
 """
+
+
 def keyboard_callback_handler(update, context):
     query = update.callback_query
     query.answer()
     data = query.data
-    # now = datetime.datetime.now()
     chat_id = update.effective_message.chat_id
-    #current_text =update.effective_message.text
 
     def ADD_DEBT_KEYBOARD():
         context.bot.send_message(
             chat_id=chat_id,
-            text="Add a new contact to send a request or \n"
-                 "choose from the list with whom you have already worked",
+            text="For enter new information of the debtor: \n write the user ID, the amount, for which, press enter. Example: \n"
+                 "49a21054-1dc4-4e34-81ab-0acd9225da44 25 coffe",
             reply_markup=keyboard.get_add_debt_keyboard(),
         )
 
@@ -74,7 +80,7 @@ def keyboard_callback_handler(update, context):
             chat_id=chat_id,
             text=" There will be something like a menu in which it will be visible to whom you have already sent requests \n"
                  "Each button below the message will connect you with the contact you have already contacted.\n"
-                 "I also don’t know how to implementь",
+                 "I also don’t know how to implement",
             reply_markup=keyboard.get_debt_keyboard_inline(),
         )
 
@@ -85,31 +91,45 @@ def keyboard_callback_handler(update, context):
             reply_markup=keyboard.get_keyboard_inline()
         )
 
+    def GET_PARSING():
+        context.bot.send_message(
+            chat_id=chat_id,
+            text="!!!!!!!!!",
+            reply_markup=None
+        )
+
     def select_keyboard(argument):
         switcher = {
-            keyboard.KEYBOARD_INLINE['ADD_DEBT_INLINE']['code'] : ADD_DEBT_KEYBOARD,
+            keyboard.KEYBOARD_INLINE['ADD_DEBT_INLINE']['code']: ADD_DEBT_KEYBOARD,
             keyboard.KEYBOARD_INLINE['LIST_DEBT_INLINE']['code']: DEBT_KEYBOARD,
             keyboard.KEYBOARD_INLINE['BACK_INLINE']['code']: GET_KEYBOARD,
+            keyboard.KEYBOARD_INLINE['FIND_CONT_INLINE']['code']: GET_PARSING,
         }
         func = switcher.get(argument, lambda: "Error")
         return func()
+
     select_keyboard(data)
+
 
 @debug_requests
 def add_debt(update, context):
     context.bot.send_message(
         chat_id=update.message.chat_id,
-        text="Add a new contact or select an existing one",
+        text="For enter new information of the debtor: \n write the user ID, the amount, for which, press enter. Example: \n"
+             "49a21054-1dc4-4e34-81ab-0acd9225da44 25 coffe",
         reply_markup=keyboard.get_keyboard_inline()
     )
 
+
 @debug_requests
 def pay_debt(update, context):
+    db_connection.users_delete_db()
     context.bot.send_message(
         chat_id=update.message.chat_id,
         text="A list of lenders for payment will be displayed.",
         reply_markup=keyboard.get_debt_keyboard_inline()
     )
+
 
 @debug_requests
 def do_start(update, context):
@@ -121,11 +141,11 @@ def do_start(update, context):
         reply_markup=keyboard.get_start_keyboard()
     )
 
+
 @debug_requests
 def do_echo(update, context):
-    username = context.user_data
-    chat_id = update.message.chat_id
     text = update.message.text
+    result = re.split(r' ', text)
     if text == keyboard.ADD_DEBT_KEYBOARD:
         return add_debt(update, context)
     elif text == keyboard.PAY_DEBT_KEYBOARD:
@@ -134,32 +154,68 @@ def do_echo(update, context):
         return do_list_debt(update, context)
     elif text == keyboard.INFO_KEYBOARD:
         return do_info(update, context)
+    elif text == keyboard.TABLE_TRANSACTION:
+        return do_transaction(update, context)
     else:
-        reply_text = "USER ID = {} \n The bot is still under development\n" \
+        do_id(update, context, result)
+
+        """reply_text = "USER ID = {} \n The bot is still under development\n" \
                      "You wrote: {}\n" \
-                     "USERNAME = {}".format(chat_id, text, username)
+                     "USERNAME = {}".format(chat_id, result, username)
         context.bot.send_message(
             chat_id=chat_id,
             text=reply_text,
             reply_markup = keyboard.get_start_keyboard(),
-        )
+        )"""
+
+
+def do_id(update, context, result):
+    telegram_id = update.message.chat_id
+    """ find telgram_id"""
+    created_by = db_connection.users_select_id_db(telegram_id)
+    """find user id"""
+    db_connection.transactions_insert_db(created_by, result)
+    text = "Add values to the transaction table " + str(telegram_id) + '\n id =  ' + created_by + '\n creditor_id = ' + \
+           result[0] + '\n transaction successful'
+
+    context.bot.send_message(
+        chat_id=update.message.chat_id,
+        text=text,
+        reply_markup=None,
+    )
+
 
 def do_info(update, context):
     text = "With the help of the bot, you can share a common check!\n" \
            "To do this, click the add debt button, select the contact (or the name of the debtor)," \
            "and write the amount of debt in a line and for what, then send a request to the name of the debtor"
+
+    db_connection.users_insert_db()
+
     context.bot.send_message(
         chat_id=update.message.chat_id,
         text=text,
         reply_markup=keyboard.get_start_keyboard()
     )
 
-def do_list_debt(update, context):
+
+def do_transaction(update, context):
+    text = "Table of transactions. \n " + db_connection.transactions_select_db()
     chat_id = update.message.chat_id
     context.bot.send_message(
         chat_id=chat_id,
-        text="A list of debtors will be displayed."
+        text=text,
     )
+
+
+def do_list_debt(update, context):
+    text = db_connection.users_select_db()
+    chat_id = update.message.chat_id
+    context.bot.send_message(
+        chat_id=chat_id,
+        text=text,
+    )
+
 
 def do_list_my_debt(update, context):
     chat_id = update.message.chat_id
@@ -167,6 +223,7 @@ def do_list_my_debt(update, context):
         chat_id=chat_id,
         text="A list of my debts will be displayed."
     )
+
 
 def main():
     logger.info("Start Bot ...")
@@ -182,6 +239,7 @@ def main():
     dp.add_handler(buttons_handler)
     updater.start_polling()
     updater.idle()
+
 
 if __name__ == '__main__':
     logger.info('server started')
